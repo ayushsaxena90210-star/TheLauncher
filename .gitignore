@@ -1,0 +1,24 @@
+# Generated application data
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+assets/cache/
+
+# Node and Electron output
+node_modules/
+dist/
+out/
+release/
+
+# Python output
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+.pytest_cache/
+
+# Environment and editor files
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
