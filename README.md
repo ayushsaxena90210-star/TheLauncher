@@ -4,7 +4,7 @@ An offline-first desktop game launcher being built as a portfolio-quality softwa
 
 ## Status
 
-**Phase 2 complete.** The Electron shell and local FastAPI service now include SQLite persistence, Alembic migrations, and a small versioned games CRUD API. The game-library UI is deferred to Phase 3.
+**Phase 3 complete.** The Electron shell now provides a local game-library experience backed by the existing FastAPI and SQLite games API.
 
 ## Scope
 
@@ -48,9 +48,9 @@ src/        Electron main/preload and React renderer source
 
 ## Roadmap
 
-Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Subsequent phases cover the game library UI, launching, scanning, metadata/artwork, statistics, settings, polish, and packaging.
+Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 adds the game library UI and manual game management. Subsequent phases cover launching, scanning, metadata/artwork, statistics, settings, polish, and packaging.
 
-See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), and the current [handoff](handoff.md).
+See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), [Phase 3 notes](docs/Phase3.md), and the current [handoff](handoff.md).
 
 ## Screenshots
 
@@ -85,7 +85,7 @@ On systems where `python` does not identify the environment containing FastAPI, 
 
 ## Known limitations
 
-The UI for game management, scanning, executable launching, metadata/artwork, and statistics is intentionally not implemented yet. The Phase 2 API is a persistence contract, not a library screen.
+Game launching, scanning, metadata/artwork, sessions/playtime, statistics, settings, and favourites are intentionally not implemented yet.
 
 ## Credits
 
