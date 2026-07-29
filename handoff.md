@@ -29,7 +29,7 @@ FastAPI applies `20260729_01_create_games` on startup. In development it creates
 - Added `games` persistence model and the first Alembic revision.
 - Added `/api/v1/games` create, list, retrieve, update, and delete operations.
 - Added API/migration tests and stable `{ "detail": { "code", "message" } }` error responses.
-- Kept the preload bridge and renderer unchanged; no library UI was added.
+- Kept the preload bridge narrow and renderer unchanged; the preload bundle is emitted as CommonJS for Electron sandbox compatibility. No library UI was added.
 
 ## Next phase: Phase 3
 

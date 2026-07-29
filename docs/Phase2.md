@@ -8,6 +8,7 @@
 - Added versioned `GET`, `POST`, `PATCH`, and `DELETE` game API contracts under `/api/v1/games`.
 - Added stable API validation, not-found, and duplicate-path error responses.
 - Added automated health, migration, and CRUD API tests.
+- Configured Electron's sandboxed preload bundle as CommonJS so the typed health bridge loads in development and production.
 
 ## Architecture decisions
 

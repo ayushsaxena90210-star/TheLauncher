@@ -13,7 +13,7 @@ const createWindow = (): BrowserWindow => {
     titleBarStyle: "hidden",
     backgroundColor: "#0b1020",
     webPreferences: {
-      preload: path.join(__dirname, "../preload/index.mjs"),
+      preload: path.join(__dirname, "../preload/index.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
