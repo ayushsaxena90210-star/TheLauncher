@@ -29,3 +29,9 @@
 **Decision:** Use Tailwind for the new project's UI despite Hydra using SCSS.
 
 **Reason:** Tailwind is explicitly requested for Phase 1. The visual inspiration is independent of the styling implementation.
+
+## ADR-006: Apply local migrations at FastAPI startup
+
+**Decision:** FastAPI runs the checked-in Alembic migration chain before serving requests.
+
+**Reason:** Electron starts the backend directly, so users should not need a separate migration command. The schema remains versioned and is never changed from UI code.

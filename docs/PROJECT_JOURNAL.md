@@ -14,3 +14,11 @@
 - Electron starts FastAPI as a child process and the renderer displays its readiness state.
 - Added one backend health test and completed TypeScript and production-build verification.
 - No SQLite models, migrations, CRUD, scanning, launch, metadata, or artwork features were added.
+
+## 2026-07-29 â€” Phase 2 persistence foundation
+
+- Added SQLAlchemy SQLite configuration, per-request sessions, and Alembic migration support.
+- Added the initial `games` table and migration `20260729_01_create_games`.
+- Added a small `/api/v1/games` CRUD contract with schema validation, stable errors, repository/service separation, and isolated SQLite tests.
+- FastAPI now applies versioned migrations on startup; Electron provides a per-user database path in packaged mode while development defaults to `database/the-launcher.db`.
+- No game-library UI, scanner, launcher, metadata, or statistics functionality was added.

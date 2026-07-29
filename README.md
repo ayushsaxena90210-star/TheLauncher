@@ -4,7 +4,7 @@ An offline-first desktop game launcher being built as a portfolio-quality softwa
 
 ## Status
 
-**Phase 1 complete.** The Electron shell, React renderer, Tailwind theme, and local FastAPI health service are runnable. No database or game-library feature exists yet.
+**Phase 2 complete.** The Electron shell and local FastAPI service now include SQLite persistence, Alembic migrations, and a small versioned games CRUD API. The game-library UI is deferred to Phase 3.
 
 ## Scope
 
@@ -48,9 +48,9 @@ src/        Electron main/preload and React renderer source
 
 ## Roadmap
 
-Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 will add the persistence foundation. Subsequent phases cover the game library, launching, scanning, metadata/artwork, statistics, settings, polish, and packaging.
+Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Subsequent phases cover the game library UI, launching, scanning, metadata/artwork, statistics, settings, polish, and packaging.
 
-See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), and the [Phase 1 handoff](handoff.md).
+See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), and the current [handoff](handoff.md).
 
 ## Screenshots
 
@@ -58,11 +58,11 @@ Placeholder — the Phase 1 foundation screen exists; portfolio screenshots will
 
 ## Current API endpoints
 
-`GET /health` is available locally. The remaining endpoint contract is proposed in [API.md](docs/API.md).
+`GET /health` and the Phase 2 `/api/v1/games` CRUD endpoints are available locally. See [API.md](docs/API.md).
 
 ## Database schema
 
-No database exists yet. Phase 2 will introduce SQLite and migrations; the proposed schema is documented in [DATABASE.md](docs/DATABASE.md).
+SQLite and the initial Alembic migration are implemented. The current schema and future tables are documented in [DATABASE.md](docs/DATABASE.md).
 
 ## Installation and running
 
@@ -85,7 +85,7 @@ On systems where `python` does not identify the environment containing FastAPI, 
 
 ## Known limitations
 
-Game management, persistence, scanning, executable launching, and metadata/artwork are intentionally not implemented yet.
+The UI for game management, scanning, executable launching, metadata/artwork, and statistics is intentionally not implemented yet. The Phase 2 API is a persistence contract, not a library screen.
 
 ## Credits
 

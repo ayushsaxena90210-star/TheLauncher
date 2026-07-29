@@ -1,8 +1,8 @@
-# API Contract (Proposed)
+# API Contract
 
-The FastAPI service is local-only. The health endpoint is implemented; all other endpoints below are proposed and will eventually be versioned under `/api/v1`.
+The FastAPI service is local-only and versioned resource endpoints use `/api/v1`.
 
-## Phase 1 health contract
+## System endpoint
 
 | Method | Path | Purpose |
 | --- | --- | --- |
@@ -14,11 +14,22 @@ Current response:
 { "status": "ok", "service": "backend" }
 ```
 
+## Implemented Phase 2 resource
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/v1/games` | List persisted games by title. |
+| `POST` | `/api/v1/games` | Create a locally installed game record. |
+| `GET` | `/api/v1/games/{id}` | Retrieve one game record. |
+| `PATCH` | `/api/v1/games/{id}` | Update supplied game fields. |
+| `DELETE` | `/api/v1/games/{id}` | Remove a game record only. |
+
+Games use UUID identifiers. `title` and `executable_path` are required when creating; all stored paths are normalized absolute paths. A duplicate executable path returns HTTP 409 with `duplicate_executable_path`.
+
 ## Planned resource groups
 
 | Group | Purpose | Planned phase |
 | --- | --- | --- |
-| `/games` | Create, read, update, delete, search, and filter library games | 2–3 |
 | `/library` | Summaries, recently played, and collection views | 3, 7 |
 | `/launch-sessions` | Persist session start/end and playtime totals | 4 |
 | `/scanner` | Scan requests, progress, review candidates, import | 5 |
@@ -30,5 +41,5 @@ Current response:
 
 - JSON request/response bodies use Pydantic models.
 - UUIDs identify persistent records.
-- Errors use a stable `{ "detail": { "code", "message" } }` shape.
+- Errors use a stable `{ "detail": { "code", "message" } }` shape, including validation failures.
 - Filesystem paths are accepted only where required and are validated on the backend.

@@ -41,6 +41,10 @@ const createWindow = (): BrowserWindow => {
 app.whenReady().then(async () => {
   app.setAppUserModelId("com.thelauncher.app");
 
+  if (!process.env.ELECTRON_RENDERER_URL && !process.env.LAUNCHER_DATABASE_PATH) {
+    process.env.LAUNCHER_DATABASE_PATH = path.join(app.getPath("userData"), "the-launcher.db");
+  }
+
   ipcMain.handle("backend:get-health", () => backendProcess.getHealth());
 
   await backendProcess.start();

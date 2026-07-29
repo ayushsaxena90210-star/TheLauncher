@@ -1,7 +1,13 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel
 
+from .api.v1.router import router as api_v1_router
 from .config import settings
+from .errors import validation_error_handler
+from .migrations import upgrade_database
 
 
 class HealthResponse(BaseModel):
@@ -9,7 +15,15 @@ class HealthResponse(BaseModel):
     service: str
 
 
-app = FastAPI(title=settings.app_name, version="0.1.0")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    upgrade_database()
+    yield
+
+
+app = FastAPI(title=settings.app_name, version="0.2.0", lifespan=lifespan)
+app.add_exception_handler(RequestValidationError, validation_error_handler)
+app.include_router(api_v1_router, prefix=settings.api_prefix)
 
 
 @app.get("/health", response_model=HealthResponse, tags=["system"])
