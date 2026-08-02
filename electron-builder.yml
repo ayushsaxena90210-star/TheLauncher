@@ -1,0 +1,17 @@
+appId: com.thelauncher.app
+productName: The Launcher
+directories:
+  buildResources: build
+files:
+  - out/**
+  - package.json
+extraResources:
+  - from: backend
+    to: backend
+    filter:
+      - "**/*"
+win:
+  target: nsis
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
