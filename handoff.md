@@ -1,19 +1,23 @@
-# Project Handoff — Ready for Phase 9
+# Project Handoff — Phase 9 Complete
 
 ## Current status
 
-Phases 1–8 are complete. The launcher is an offline-first Electron application with a React renderer, typed preload IPC, FastAPI business logic, and SQLite persistence.
+Phases 1–9 are complete. The launcher is an offline-first Electron desktop application with a React renderer, typed preload IPC, FastAPI business logic, and SQLite persistence.
 
-Phase 8 added the Settings Workspace and desktop foundation:
+Phase 9 delivered the UI polish, design system, and desktop experience pass:
 
-- Persisted Light, Dark, and System theme preferences with immediate switching.
-- Saved scan folders and a default metadata-queue option.
-- Provider-neutral metadata status (IGDB is the active provider) without exposing credentials.
-- Safe artwork-cache statistics, clear, and rebuild operations restricted to the managed cache directory.
-- Custom title-bar controls for minimize, maximize/restore, and close.
-- SQLite migration `20260805_01_add_settings_and_scan_roots` for `settings` and `scan_roots`.
+- **`design-system.css`** — single source of truth for all tokens (colour, spacing, radius, shadow, motion, z-index).
+- **Six accent colour presets** (Cyan, Indigo, Violet, Emerald, Amber, Rose) persisted to SQLite and applied via `data-accent` on `<html>`.
+- **Full light/dark/system theme support** across every page and component.
+- **Reduced-motion** — respects `prefers-reduced-motion` and a manual Settings toggle; persisted to SQLite.
+- **Two-panel shell** — Hydra-inspired `AppSidebar` with brand row, navigation, scrollable game list (thumbnail + title + genre), and Settings link.
+- **`GameContext`** — shared game list; eliminates duplicate IPC fetches between sidebar and page content.
+- **Unified UI primitives** — `Button`, `Dialog` (focus-trapped, Escape-handled), `Skeleton`, `EmptyState`, `ErrorState`.
+- **All dialogs migrated** to the `Dialog` primitive (focus trap + backdrop click).
+- **`GameCard` play button** uses accent CSS variables instead of hardcoded gradient.
+- **Backend** — `accent_color` and `reduced_motion` added to `SettingsResponse` / `SettingsUpdate` schema with no new migrations required.
 
-The existing library, scanner, launcher/session tracking, metadata pipeline, cached artwork, and Game Details page are stable completed work. Do not refactor them unless a verified defect requires it.
+The existing library, scanner, launcher/session tracking, metadata pipeline, cached artwork, and Game Details page are stable and have not been restructured.
 
 ## Architecture constraints
 
@@ -31,12 +35,27 @@ SQLite + managed local artwork cache
 - Keep credentials out of renderer payloads and persistent settings.
 - Continue using versioned Alembic migrations for schema changes.
 - Hydra remains visual inspiration only; do not copy its code, assets, or architecture.
+- `design-system.css` is the single source of truth — raw hex/px values must not appear in component CSS.
+
+## Key file reference
+
+| File | Role |
+|---|---|
+| `src/renderer/src/design-system.css` | All design tokens and CSS component classes |
+| `src/renderer/src/context/GameContext.tsx` | Shared game list; wrap with `<GameProvider>` |
+| `src/renderer/src/components/ui/` | Button, Dialog, Skeleton, EmptyState, ErrorState |
+| `src/renderer/src/components/shell/AppSidebar.tsx` | Sidebar with game list |
+| `src/renderer/src/app.tsx` | Root shell; applies theme/accent/motion to `<html>` |
+| `src/renderer/src/vite-env.d.ts` | Window global types (incl. `AppSettings`, `AccentColor`) |
+| `backend/app/schemas.py` | `SettingsResponse` / `SettingsUpdate` |
+| `backend/app/settings_service.py` | Reads/writes accent + reduced_motion |
+| `docs/Phase9.md` | Full Phase 9 change log and design decisions |
 
 ## Verification baseline
 
-- `npm run build` passed (includes TypeScript checking).
-- `python -m pytest backend/tests -q --basetemp C:\projects\pytest-phase8-basetemp` passed: 25 tests.
-- `git diff --check` passed.
+- `npm run typecheck` → 0 errors
+- `npm run build` → Vite 782 kB bundle, 0 errors
+- `pytest backend/tests/ -q` → 25 / 25 passed
 
 For a local Windows run:
 
@@ -45,27 +64,26 @@ $env:PYTHON_EXECUTABLE="C:\Users\vinsa\AppData\Local\Programs\Python\Python312\p
 npm run dev
 ```
 
-Perform a manual visual smoke test of title-bar controls on the target Windows environment.
+## Manual smoke-test checklist
 
-## Phase 9 — UI polish
+- [ ] App starts; sidebar shows brand + Library nav active
+- [ ] Sidebar game list populates; clicking a game opens Game Details
+- [ ] Add game via Library → Add game; game appears in sidebar list
+- [ ] Scan folders: scan starts, candidates appear, import works
+- [ ] Settings → Appearance: theme toggle switches live (Light / Dark / System)
+- [ ] Settings → Appearance: accent colour changes accent throughout UI
+- [ ] Settings → Appearance: Reduce motion toggle disables animations
+- [ ] Settings → Scan folders: add/remove saved folder; Rescan triggers the scan dialog
+- [ ] Settings → Cache: stats display; Clear cache asks for confirmation
+- [ ] Game Details: Play button launches the game; session is recorded
+- [ ] Title-bar minimize/maximize/close all function correctly
+- [ ] All dialogs: Escape closes; Tab cycles focus; backdrop click closes
+- [ ] Light theme: text is readable on light backgrounds; no dark-only hardcoded colours
+- [ ] Focus indicators visible on all interactive elements (keyboard nav)
 
-Phase 9 focuses on keyboard flow, responsive desktop behavior, subtle animations, accessibility, and refined loading, empty, and error states. Preserve the established settings and desktop architecture.
+## What is explicitly out of scope
 
-Before implementation:
-
-1. Review the current renderer, title bar, sidebar, Settings Workspace, and existing loading/error/empty components.
-2. Verify the baseline build, type check, and regression tests against the code.
-3. Propose the Phase 9 UI/accessibility plan and wait for approval before modifying files.
-
-### Phase 9 constraints
-
-- Do not add cloud sync, accounts, social features, achievements, downloads, plugins, auto-updates, or packaging work.
-- Do not redesign completed data flows or bypass typed IPC.
-- Keep Phase 9 focused on polish and accessibility; record any scope expansion as a TODO.
-
-### Phase 9 verification targets
-
-- Keyboard navigation and visible focus states work across primary actions and dialogs.
-- Theme support remains correct for Light, Dark, and System modes.
-- Loading, empty, error, hover, and selected states are consistent and accessible.
-- `npm run build`, `npm run typecheck`, backend tests, and relevant regression checks pass.
+- Cloud sync, accounts, friends, achievements
+- Plugins, auto-updates
+- Packaging / installer
+- The Discover tab (button visible but disabled)

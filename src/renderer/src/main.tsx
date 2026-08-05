@@ -4,6 +4,7 @@ import { HashRouter } from "react-router-dom";
 
 import { App } from "./app";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import "./design-system.css";
 import "./styles.css";
 import "./settings.css";
 

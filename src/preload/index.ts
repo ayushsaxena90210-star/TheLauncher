@@ -33,9 +33,11 @@ export type ScanImportResult = { scan_id: string; imported_count: number; skippe
 export type MetadataEnqueueResult = { game_id: string; state: "queued" | "pending"; message: string | null };
 export type MetadataGameStatus = { game_id: string; metadata_status: "queued" | "fetching" | "success" | "failed" | null };
 export type ThemePreference = "light" | "dark" | "system";
+export type AccentColor = "cyan" | "indigo" | "violet" | "emerald" | "amber" | "rose";
 export type ScanRoot = { id: string; path: string; enabled: boolean; created_at: string };
 export type CacheStatus = { location: string; size_bytes: number; artwork_count: number; last_metadata_refresh_at: string | null; last_cleanup_at: string | null };
-export type SettingsOverview = { settings: { theme: ThemePreference; scan_options: { queue_metadata: boolean } }; scan_roots: ScanRoot[]; library_size: number; metadata: { provider: string; configured: boolean; queue_size: number; last_refresh_at: string | null }; cache: CacheStatus };
+export type AppSettings = { theme: ThemePreference; scan_options: { queue_metadata: boolean }; accent_color: AccentColor; reduced_motion: boolean };
+export type SettingsOverview = { settings: AppSettings; scan_roots: ScanRoot[]; library_size: number; metadata: { provider: string; configured: boolean; queue_size: number; last_refresh_at: string | null }; cache: CacheStatus };
 export type CacheOperation = CacheStatus & { removed_count: number; removed_bytes: number };
 
 function subscribeScanEvent(channel: string, callback: (scan: ScanStatus) => void): () => void {

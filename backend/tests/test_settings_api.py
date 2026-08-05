@@ -10,7 +10,7 @@ def test_settings_persist_scan_roots_and_overview(client: TestClient, tmp_path: 
 
     updated = client.put("/api/v1/settings", json={"theme": "dark", "scan_options": {"queue_metadata": False}})
     assert updated.status_code == 200
-    assert updated.json() == {"theme": "dark", "scan_options": {"queue_metadata": False}}
+    assert updated.json() == {"theme": "dark", "scan_options": {"queue_metadata": False}, "accent_color": "cyan", "reduced_motion": False}
 
     root = tmp_path / "Games"
     root.mkdir()

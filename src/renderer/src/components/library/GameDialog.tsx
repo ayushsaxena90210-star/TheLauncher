@@ -1,6 +1,7 @@
-import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { Dialog } from "../ui/Dialog";
+import { Button } from "../ui/Button";
 import type { Game, GameFormValues } from "../../types/game";
 
 type GameDialogProps = {
@@ -38,37 +39,95 @@ export function GameDialog({ game, isOpen, isSubmitting, submitError, onClose, o
     if (await onSubmit({ title, executablePath })) onClose();
   };
 
+  const err = validationError ?? submitError;
+
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-slate-950/75 p-4 backdrop-blur-sm" role="presentation">
-      <div aria-labelledby="game-dialog-title" aria-modal="true" className="w-full max-w-lg rounded-2xl border border-white/10 bg-slate-900 p-6 shadow-2xl shadow-black/40" role="dialog">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm font-medium text-cyan-300">Library</p>
-            <h2 className="mt-1 text-xl font-semibold" id="game-dialog-title">{isEditing ? "Edit game" : "Add a game"}</h2>
-          </div>
-          <button aria-label="Close dialog" className="rounded-lg p-2 text-slate-400 hover:bg-white/5 hover:text-white" disabled={isSubmitting} onClick={onClose} type="button"><X size={18} /></button>
-        </div>
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-          <label className="block text-sm font-medium text-slate-200">Game title
-            <input autoFocus className="mt-1.5 w-full rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2.5 text-sm outline-none transition placeholder:text-slate-600 focus:border-cyan-300" disabled={isSubmitting} onChange={(event) => setValues((current) => ({ ...current, title: event.target.value }))} placeholder="e.g. Hollow Knight" value={values.title} />
-          </label>
-          <label className="block text-sm font-medium text-slate-200">Executable path
-            <input className="mt-1.5 w-full rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2.5 text-sm outline-none transition placeholder:text-slate-600 focus:border-cyan-300" disabled={isSubmitting} onChange={(event) => setValues((current) => ({ ...current, executablePath: event.target.value }))} placeholder="C:\\Games\\Example\\game.exe" value={values.executablePath} />
-            <span className="mt-1.5 block text-xs font-normal text-slate-500">Use the absolute path to the game executable.</span>
-          </label>
-          {game && (game.description || game.release_date || game.genres) && <section className="rounded-lg border border-white/10 bg-slate-950/40 p-3 text-sm text-slate-300" aria-label="Game metadata">
-            <p className="font-medium text-cyan-200">Metadata</p>
-            {game.release_date && <p className="mt-1 text-xs text-slate-400">Released {game.release_date}</p>}
-            {game.genres && <p className="mt-1 text-xs text-slate-400">{game.genres}</p>}
-            {game.description && <p className="mt-2 max-h-24 overflow-y-auto text-xs leading-5 text-slate-300">{game.description}</p>}
-          </section>}
-          {(validationError || submitError) && <p className="rounded-lg bg-rose-400/10 px-3 py-2 text-sm text-rose-200" role="alert">{validationError ?? submitError}</p>}
-          <div className="flex justify-end gap-3 pt-2">
-            <button className="rounded-lg px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-white/5" disabled={isSubmitting} onClick={onClose} type="button">Cancel</button>
-            <button className="rounded-lg bg-cyan-300 px-4 py-2.5 text-sm font-semibold text-slate-950 hover:bg-cyan-200 disabled:cursor-wait disabled:opacity-60" disabled={isSubmitting} type="submit">{isSubmitting ? "Saving…" : isEditing ? "Save changes" : "Add game"}</button>
-          </div>
-        </form>
+    <Dialog
+      closeDisabled={isSubmitting}
+      isOpen={isOpen}
+      labelledBy="game-dialog-title"
+      maxWidth="540px"
+      onClose={onClose}
+      hideCloseButton={false}
+    >
+      <div style={{ marginBottom: 4 }}>
+        <p className="page-eyebrow" style={{ marginBottom: 4 }}>Library</p>
+        <h2 id="game-dialog-title" style={{ margin: 0, fontSize: 20, fontWeight: 600 }}>
+          {isEditing ? "Edit game" : "Add a game"}
+        </h2>
       </div>
-    </div>
+
+      <form onSubmit={handleSubmit} style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14 }}>
+        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-text-secondary)" }}>
+          Game title
+          <input
+            autoFocus
+            className="ds-input"
+            disabled={isSubmitting}
+            onChange={(e) => setValues((c) => ({ ...c, title: e.target.value }))}
+            placeholder="e.g. Hollow Knight"
+            style={{ marginTop: 6 }}
+            value={values.title}
+          />
+        </label>
+        <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--color-text-secondary)" }}>
+          Executable path
+          <input
+            className="ds-input"
+            disabled={isSubmitting}
+            onChange={(e) => setValues((c) => ({ ...c, executablePath: e.target.value }))}
+            placeholder="C:\Games\Example\game.exe"
+            style={{ marginTop: 6 }}
+            value={values.executablePath}
+          />
+          <span style={{ display: "block", marginTop: 5, fontSize: 11, color: "var(--color-text-faint)" }}>
+            Use the absolute path to the game executable.
+          </span>
+        </label>
+
+        {game && (game.description || game.release_date || game.genres) && (
+          <section
+            aria-label="Game metadata"
+            style={{
+              padding: 12, borderRadius: "var(--radius-lg)",
+              border: "1px solid var(--color-border-subtle)",
+              background: "rgba(0,0,0,0.12)",
+              fontSize: 12,
+            }}
+          >
+            <p style={{ margin: "0 0 6px", fontWeight: 600, color: "var(--color-accent)" }}>Metadata</p>
+            {game.release_date && <p style={{ margin: "0 0 3px", color: "var(--color-text-muted)" }}>Released {game.release_date}</p>}
+            {game.genres && <p style={{ margin: "0 0 3px", color: "var(--color-text-muted)" }}>{game.genres}</p>}
+            {game.description && (
+              <p style={{ margin: "6px 0 0", maxHeight: 80, overflowY: "auto", lineHeight: 1.6, color: "var(--color-text-secondary)" }}>
+                {game.description}
+              </p>
+            )}
+          </section>
+        )}
+
+        {err && (
+          <div
+            role="alert"
+            style={{
+              padding: "10px 12px", borderRadius: "var(--radius-md)",
+              background: "var(--color-danger-bg)", color: "var(--color-danger)",
+              border: "1px solid var(--color-danger-border)", fontSize: 13,
+            }}
+          >
+            {err}
+          </div>
+        )}
+
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, paddingTop: 4 }}>
+          <Button disabled={isSubmitting} onClick={onClose} variant="ghost">
+            Cancel
+          </Button>
+          <Button disabled={isSubmitting} isLoading={isSubmitting} type="submit" variant="primary">
+            {isEditing ? "Save changes" : "Add game"}
+          </Button>
+        </div>
+      </form>
+    </Dialog>
   );
 }

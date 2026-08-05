@@ -10,7 +10,7 @@ export function useSettings() {
     setIsLoading(true);
     setError(null);
     try {
-      setOverview(await window.launcher.getSettingsOverview());
+      setOverview(await window.launcher.getSettingsOverview() as unknown as SettingsOverview);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Unable to load settings.");
     } finally {

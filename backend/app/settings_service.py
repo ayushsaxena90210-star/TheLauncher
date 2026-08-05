@@ -17,6 +17,8 @@ from .schemas import ScanOptions, ScanRootCreate, SettingsResponse, SettingsUpda
 THEME_KEY = "theme"
 SCAN_OPTIONS_KEY = "scan_options"
 CACHE_LAST_CLEANUP_KEY = "cache_last_cleanup_at"
+ACCENT_COLOR_KEY = "accent_color"
+REDUCED_MOTION_KEY = "reduced_motion"
 
 
 class SettingsService:
@@ -24,6 +26,8 @@ class SettingsService:
         return SettingsResponse(
             theme=self._get_value(session, THEME_KEY, "system"),
             scan_options=ScanOptions(**self._get_value(session, SCAN_OPTIONS_KEY, {})),
+            accent_color=self._get_value(session, ACCENT_COLOR_KEY, "cyan"),
+            reduced_motion=bool(self._get_value(session, REDUCED_MOTION_KEY, False)),
         )
 
     def update_settings(self, session: Session, payload: SettingsUpdate) -> SettingsResponse:

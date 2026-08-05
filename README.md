@@ -4,7 +4,7 @@ An offline-first desktop game launcher being built as a portfolio-quality softwa
 
 ## Status
 
-**Phase 8 Milestone A complete.** Local settings, persisted scan folders, metadata/cache management, themes, and desktop window controls are available.
+**Phase 9 complete.** A unified design system, Hydra-inspired two-panel sidebar, accent colour picker, full light/dark/system theme support, reduced-motion, and shared UI primitives (Button, Dialog, Skeleton, EmptyState, ErrorState) have been implemented.
 
 ## Scope
 
@@ -48,9 +48,9 @@ src/        Electron main/preload and React renderer source
 
 ## Roadmap
 
-Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 added optional IGDB metadata and locally cached cover artwork. Phase 7 added a complete game-details experience with media and activity. Phase 8 Milestone A adds local settings infrastructure and its Settings Workspace.
+Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 added optional IGDB metadata and locally cached cover artwork. Phase 7 added a complete game-details experience with media and activity. Phase 8 added local settings infrastructure and its Settings Workspace. Phase 9 delivered the final UI polish pass: a shared design-system token layer, six accent colour presets, full light-theme support, reduced-motion accessibility, and the Hydra-inspired two-panel sidebar with live game list.
 
-See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), [Phase 3 notes](docs/Phase3.md), [Phase 4 notes](docs/Phase4.md), [Phase 5 notes](docs/Phase5.md), [Phase 6 notes](docs/Phase6.md), and the current [handoff](HANDOFF.md).
+See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), [Phase 3 notes](docs/Phase3.md), [Phase 4 notes](docs/Phase4.md), [Phase 5 notes](docs/Phase5.md), [Phase 6 notes](docs/Phase6.md), [Phase 7 notes](docs/Phase7.md), [Phase 8 notes](docs/Phase8.md), [Phase 9 notes](docs/Phase9.md), and the current [handoff](HANDOFF.md).
 
 ## Screenshots
 
@@ -85,7 +85,7 @@ On systems where `python` does not identify the environment containing FastAPI, 
 
 ## Known limitations
 
-Metadata enrichment requires local Twitch application credentials (`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`) for IGDB access. Desktop startup/window preferences remain placeholders for a future approved Phase 8 milestone. Unfinished play sessions (e.g. launcher closed while a game is running) are not recovered automatically.
+Metadata enrichment requires local Twitch application credentials (`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`) for IGDB access. Unfinished play sessions (e.g. launcher closed while a game is running) are not recovered automatically. The Discover tab in the sidebar is stubbed and disabled; it is reserved for a post-Phase-9 milestone.
 
 ## Credits
 

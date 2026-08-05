@@ -220,11 +220,15 @@ class ScanOptions(BaseModel):
 class SettingsResponse(BaseModel):
     theme: Literal["light", "dark", "system"] = "system"
     scan_options: ScanOptions = Field(default_factory=ScanOptions)
+    accent_color: Literal["cyan", "indigo", "violet", "emerald", "amber", "rose"] = "cyan"
+    reduced_motion: bool = False
 
 
 class SettingsUpdate(BaseModel):
     theme: Literal["light", "dark", "system"] | None = None
     scan_options: ScanOptions | None = None
+    accent_color: Literal["cyan", "indigo", "violet", "emerald", "amber", "rose"] | None = None
+    reduced_motion: bool | None = None
 
 
 class MetadataProviderStatusResponse(BaseModel):
