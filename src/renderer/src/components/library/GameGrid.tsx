@@ -15,9 +15,10 @@ type GameGridProps = {
   getLaunchState: (gameId: string) => GameLaunchState;
   getMetadataState: (gameId: string) => "idle" | "queued" | "fetching" | "success" | "failed";
   onFetchMetadata: (game: Game) => void;
+  onOpenDetails: (game: Game) => void;
 };
 
-export function GameGrid({ games, onEdit, onDelete, onLaunch, onOpenFileLocation, getLaunchState, getMetadataState, onFetchMetadata }: GameGridProps): React.JSX.Element {
+export function GameGrid({ games, onEdit, onDelete, onLaunch, onOpenFileLocation, getLaunchState, getMetadataState, onFetchMetadata, onOpenDetails }: GameGridProps): React.JSX.Element {
   return (
     <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {games.map((game) => {
@@ -34,6 +35,7 @@ export function GameGrid({ games, onEdit, onDelete, onLaunch, onOpenFileLocation
             onLaunch={onLaunch}
             onOpenFileLocation={onOpenFileLocation}
             onFetchMetadata={onFetchMetadata}
+            onOpenDetails={onOpenDetails}
           />
         );
       })}

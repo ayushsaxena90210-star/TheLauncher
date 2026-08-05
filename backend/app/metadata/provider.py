@@ -21,6 +21,15 @@ class MetadataResult:
     summary: str | None = None
     release_date: str | None = None  # ISO date string YYYY-MM-DD
     genres: list[str] = field(default_factory=list)
+    developers: list[str] = field(default_factory=list)
+    publishers: list[str] = field(default_factory=list)
+    platforms: list[str] = field(default_factory=list)
+    rating: float | None = None
+    age_rating: str | None = None
+    themes: list[str] = field(default_factory=list)
+    franchises: list[str] = field(default_factory=list)
+    game_modes: list[str] = field(default_factory=list)
+    official_website: str | None = None
     cover_image_id: str | None = None  # Provider-specific image identifier
 
 

@@ -10,6 +10,15 @@ export type Game = {
   metadata_source: string | null;
   metadata_confidence: number | null;
   genres: string | null;
+  developers: string | null;
+  publishers: string | null;
+  platforms: string | null;
+  rating: number | null;
+  age_rating: string | null;
+  themes: string | null;
+  franchises: string | null;
+  game_modes: string | null;
+  official_website: string | null;
   created_at: string;
   updated_at: string;
 };

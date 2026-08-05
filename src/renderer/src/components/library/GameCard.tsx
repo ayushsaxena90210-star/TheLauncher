@@ -14,6 +14,7 @@ type GameCardProps = {
   launchError: string | null;
   metadataState: "idle" | "queued" | "fetching" | "success" | "failed";
   onFetchMetadata: (game: Game) => void;
+  onOpenDetails: (game: Game) => void;
 };
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -38,21 +39,21 @@ function coverUrl(gameId: string): string {
   return `${apiBase}/metadata/games/${gameId}/cover`;
 }
 
-export function GameCard({ game, onEdit, onDelete, onLaunch, onOpenFileLocation, launchState, launchError, metadataState, onFetchMetadata }: GameCardProps): React.JSX.Element {
+export function GameCard({ game, onEdit, onDelete, onLaunch, onOpenFileLocation, launchState, launchError, metadataState, onFetchMetadata, onOpenDetails }: GameCardProps): React.JSX.Element {
   const createdAt = new Date(game.created_at);
   const createdLabel = Number.isNaN(createdAt.valueOf()) ? "Unknown date" : dateFormatter.format(createdAt);
   const isPlayDisabled = launchState !== "idle";
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-white/10 bg-slate-900/65 shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:border-cyan-200/25">
-      <div className="relative grid aspect-[16/9] place-items-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(34,211,238,.2),transparent_35%),linear-gradient(135deg,#172554,#111827)]">
+      <button aria-label={`Open ${game.title} details`} className="relative grid aspect-[16/9] w-full place-items-center overflow-hidden bg-[radial-gradient(circle_at_30%_20%,rgba(34,211,238,.2),transparent_35%),linear-gradient(135deg,#172554,#111827)]" onClick={() => onOpenDetails(game)} type="button">
         {game.cover_path ? <img alt={`${game.title} cover`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" src={coverUrl(game.id)} /> : <span className="text-xs font-medium uppercase tracking-[0.2em] text-cyan-100/50">Cover art</span>}
         <span className="absolute inset-0 bg-gradient-to-t from-slate-950/50 to-transparent" />
-      </div>
+      </button>
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="truncate font-semibold text-slate-100" title={game.title}>{game.title}</h2>
+            <button className="truncate text-left font-semibold text-slate-100 hover:text-cyan-200" onClick={() => onOpenDetails(game)} title={game.title} type="button">{game.title}</button>
             <p className="mt-1 truncate text-xs text-slate-400" title={game.executable_path}>{game.executable_path}</p>
           </div>
           <MoreHorizontal className="shrink-0 text-slate-500" size={19} aria-hidden="true" />

@@ -143,6 +143,8 @@ export const backendClient = {
 
   enqueueMetadata: (gameId: string): Promise<MetadataEnqueueResult> =>
     request<MetadataEnqueueResult>(`/metadata/games/${gameId}/enqueue`, { method: "POST" }),
+  refreshMetadata: (gameId: string): Promise<MetadataEnqueueResult> =>
+    request<MetadataEnqueueResult>(`/metadata/games/${gameId}/refresh`, { method: "POST" }),
 
   getMetadataGameStatus: (gameId: string): Promise<MetadataGameStatus> =>
     request<MetadataGameStatus>(`/metadata/games/${gameId}/status`),

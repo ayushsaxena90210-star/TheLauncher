@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from ...database import get_session
-from ...schemas import RecentGameResponse, SessionComplete, SessionCreate, SessionResponse
+from ...schemas import GameActivityResponse, RecentGameResponse, SessionComplete, SessionCreate, SessionResponse
 from ...services import SessionService
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
@@ -34,3 +34,8 @@ def recent_games(
 ) -> list[RecentGameResponse]:
     rows = service.recent_games(session, limit)
     return [RecentGameResponse.model_validate(dict(row._mapping)) for row in rows]
+
+
+@router.get("/games/{game_id}/activity", response_model=GameActivityResponse)
+def game_activity(game_id: UUID, limit: int = Query(default=12, ge=1, le=50), session: Session = Depends(get_session)) -> dict:
+    return service.game_activity(session, game_id, limit)

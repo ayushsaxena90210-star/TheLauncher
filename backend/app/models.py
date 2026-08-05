@@ -29,6 +29,16 @@ class Game(Base):
     metadata_source: Mapped[str | None] = mapped_column(String(50), nullable=True)
     metadata_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
     genres: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    developers: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    publishers: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    platforms: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    rating: Mapped[float | None] = mapped_column(Float, nullable=True)
+    age_rating: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    themes: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    franchises: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    game_modes: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    official_website: Mapped[str | None] = mapped_column(String(2048), nullable=True)
+    screenshot_paths: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utc_now)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, default=utc_now, onupdate=utc_now

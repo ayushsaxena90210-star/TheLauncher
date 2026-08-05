@@ -224,6 +224,16 @@ class MetadataService:
                         pass
                 if matched.genres:
                     game.genres = ", ".join(matched.genres)
+                for field in ("developers", "publishers", "platforms", "themes", "franchises", "game_modes"):
+                    values = getattr(matched, field)
+                    if values:
+                        setattr(game, field, ", ".join(values))
+                if matched.rating is not None:
+                    game.rating = round(matched.rating, 1)
+                if matched.age_rating:
+                    game.age_rating = matched.age_rating
+                if matched.official_website:
+                    game.official_website = matched.official_website
                 if cover_path:
                     game.cover_path = str(cover_path.resolve())
 

@@ -112,6 +112,12 @@ class SessionService:
     def recent_games(self, session: Session, limit: int = 8) -> list:
         return self.repository.recent(session, limit)
 
+    def game_activity(self, session: Session, game_id: UUID, limit: int = 12) -> dict:
+        if self.game_repository.get(session, game_id) is None:
+            GameService._not_found(game_id)
+        total, last_played, launch_count, sessions = self.repository.activity_for_game(session, game_id, limit)
+        return {"total_play_time_seconds": total, "last_played_at": last_played, "launch_count": launch_count, "sessions": sessions}
+
     def recover_orphaned_sessions(self, session: Session) -> int:
         count = self.repository.recover_orphans(session)
         if count > 0:

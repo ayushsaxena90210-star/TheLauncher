@@ -43,6 +43,7 @@ declare global {
       onScanCancelled: (callback: (scan: ScanStatus) => void) => () => void;
       onScanFailed: (callback: (scan: ScanStatus) => void) => () => void;
       enqueueMetadata: (gameId: string) => Promise<MetadataEnqueueResult>;
+      refreshMetadata: (gameId: string) => Promise<MetadataEnqueueResult>;
       onMetadataUpdated: (callback: (status: MetadataGameStatus) => void) => () => void;
     };
   }

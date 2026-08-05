@@ -23,3 +23,20 @@ button:disabled {
 .drag-region {
   -webkit-app-region: drag;
 }
+
+.menu-action {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e2e8f0;
+}
+
+.menu-action:hover {
+  background: rgba(255, 255, 255, 0.07);
+}

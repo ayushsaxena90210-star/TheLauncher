@@ -72,7 +72,7 @@ class IGDBProvider(MetadataProvider):
         safe_title = title.replace('"', '\\"')
         body = (
             f'search "{safe_title}";'
-            " fields name,summary,first_release_date,cover.image_id,genres.name;"
+            " fields name,summary,first_release_date,cover.image_id,genres.name,platforms.name,total_rating,themes.name,franchises.name,game_modes.name,involved_companies.company.name,involved_companies.developer,involved_companies.publisher,age_ratings.rating,websites.url,websites.category;"
             " limit 10;"
         )
 
@@ -111,6 +111,23 @@ class IGDBProvider(MetadataProvider):
                     if isinstance(genre, dict) and "name" in genre:
                         genres.append(genre["name"])
 
+            def names(field: str) -> list[str]:
+                return [str(entry["name"]) for entry in item.get(field, []) if isinstance(entry, dict) and entry.get("name")]
+
+            developers: list[str] = []
+            publishers: list[str] = []
+            for involvement in item.get("involved_companies", []):
+                company = involvement.get("company") if isinstance(involvement, dict) else None
+                name = company.get("name") if isinstance(company, dict) else None
+                if name and involvement.get("developer"):
+                    developers.append(str(name))
+                if name and involvement.get("publisher"):
+                    publishers.append(str(name))
+            websites = item.get("websites") if isinstance(item.get("websites"), list) else []
+            official_website = next((str(site["url"]) for site in websites if isinstance(site, dict) and site.get("url") and site.get("category") == 1), None)
+            age_ratings = item.get("age_ratings") if isinstance(item.get("age_ratings"), list) else []
+            age_rating = next((str(entry["rating"]) for entry in age_ratings if isinstance(entry, dict) and entry.get("rating") is not None), None)
+
             results.append(
                 MetadataResult(
                     provider_name=self.provider_name,
@@ -119,6 +136,15 @@ class IGDBProvider(MetadataProvider):
                     summary=item.get("summary"),
                     release_date=release_date_str,
                     genres=genres,
+                    developers=developers,
+                    publishers=publishers,
+                    platforms=names("platforms"),
+                    rating=float(item["total_rating"]) if isinstance(item.get("total_rating"), (int, float)) else None,
+                    age_rating=age_rating,
+                    themes=names("themes"),
+                    franchises=names("franchises"),
+                    game_modes=names("game_modes"),
+                    official_website=official_website,
                     cover_image_id=cover_image_id,
                 )
             )

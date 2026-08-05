@@ -70,6 +70,15 @@ class GameResponse(GameFields):
     metadata_source: str | None = None
     metadata_confidence: float | None = None
     genres: str | None = None
+    developers: str | None = None
+    publishers: str | None = None
+    platforms: str | None = None
+    rating: float | None = None
+    age_rating: str | None = None
+    themes: str | None = None
+    franchises: str | None = None
+    game_modes: str | None = None
+    official_website: str | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -100,6 +109,13 @@ class RecentGameResponse(BaseModel):
     game_cover_path: str | None = None
     last_played_at: datetime
     total_play_time_seconds: int
+
+
+class GameActivityResponse(BaseModel):
+    total_play_time_seconds: int
+    last_played_at: datetime | None = None
+    launch_count: int
+    sessions: list[SessionResponse] = Field(default_factory=list)
 
 
 class ScanStartRequest(BaseModel):
@@ -172,3 +188,7 @@ class MetadataStatusResponse(BaseModel):
 class MetadataGameStatusResponse(BaseModel):
     game_id: str
     metadata_status: str | None = None
+
+
+class ScreenshotResponse(BaseModel):
+    index: int

@@ -4,7 +4,7 @@ An offline-first desktop game launcher being built as a portfolio-quality softwa
 
 ## Status
 
-**Phase 6 complete.** Local games can be enriched with IGDB metadata and locally cached cover artwork.
+**Phase 7 complete.** Local games have deep-linked details pages with cached IGDB metadata, screenshots, and session activity.
 
 ## Scope
 
@@ -48,7 +48,7 @@ src/        Electron main/preload and React renderer source
 
 ## Roadmap
 
-Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 adds optional IGDB metadata and locally cached cover artwork. Subsequent phases cover statistics, settings, polish, and packaging.
+Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 added optional IGDB metadata and locally cached cover artwork. Phase 7 adds a complete game-details experience with media and activity. Subsequent phases cover statistics, settings, polish, and packaging.
 
 See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), [Phase 3 notes](docs/Phase3.md), [Phase 4 notes](docs/Phase4.md), [Phase 5 notes](docs/Phase5.md), [Phase 6 notes](docs/Phase6.md), and the current [handoff](HANDOFF.md).
 

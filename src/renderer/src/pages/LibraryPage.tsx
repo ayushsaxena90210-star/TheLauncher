@@ -1,5 +1,6 @@
 import { FolderSearch, Plus, Search } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { DeleteGameDialog } from "../components/library/DeleteGameDialog";
 import { EmptyState } from "../components/library/EmptyState";
@@ -22,6 +23,7 @@ import type { Game, GameFormValues } from "../types/game";
 const FILE_LOCATION_ERROR_MS = 4000;
 
 export function LibraryPage(): React.JSX.Element {
+  const navigate = useNavigate();
   // --- Data hooks (grouped) ---
   const { games, isLoading, error, refresh } = useGames();
   const { launchGame, getLaunchState } = useLaunchGame();
@@ -118,7 +120,7 @@ export function LibraryPage(): React.JSX.Element {
       {metadata.error && <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/10 px-4 py-2.5 text-sm text-rose-300" role="alert">{metadata.error}</div>}
 
       <section className="mt-6" aria-label="Games">
-        {isLoading ? <LoadingState /> : error ? <ErrorState message={error} onRetry={() => void refresh()} /> : filteredGames.length === 0 ? <EmptyState isFiltered={games.length > 0} onAddGame={openAddDialog} /> : <GameGrid games={filteredGames} getLaunchState={getLaunchState} getMetadataState={metadata.getMetadataState} onDelete={setGameToDelete} onEdit={openEditDialog} onFetchMetadata={(game) => void fetchMetadata(game)} onLaunch={handleLaunch} onOpenFileLocation={handleOpenFileLocation} />}
+      {isLoading ? <LoadingState /> : error ? <ErrorState message={error} onRetry={() => void refresh()} /> : filteredGames.length === 0 ? <EmptyState isFiltered={games.length > 0} onAddGame={openAddDialog} /> : <GameGrid games={filteredGames} getLaunchState={getLaunchState} getMetadataState={metadata.getMetadataState} onDelete={setGameToDelete} onEdit={openEditDialog} onFetchMetadata={(game) => void fetchMetadata(game)} onLaunch={handleLaunch} onOpenDetails={(game) => navigate(`/game/${game.id}`)} onOpenFileLocation={handleOpenFileLocation} />}
       </section>
       <GameDialog game={gameToEdit} isOpen={isGameDialogOpen} isSubmitting={isCreating || isUpdating} onClose={() => setIsGameDialogOpen(false)} onSubmit={submitGame} submitError={gameToEdit ? updateError : createError} />
       <DeleteGameDialog error={deleteError} game={gameToDelete} isDeleting={isDeleting} onClose={() => setGameToDelete(null)} onConfirm={confirmDelete} />

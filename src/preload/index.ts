@@ -67,6 +67,7 @@ const launcherApi = {
   onScanCancelled: (callback: (scan: ScanStatus) => void): (() => void) => subscribeScanEvent("scanner:cancelled", callback),
   onScanFailed: (callback: (scan: ScanStatus) => void): (() => void) => subscribeScanEvent("scanner:failed", callback),
   enqueueMetadata: (gameId: string): Promise<MetadataEnqueueResult> => ipcRenderer.invoke("metadata:enqueue", gameId),
+  refreshMetadata: (gameId: string): Promise<MetadataEnqueueResult> => ipcRenderer.invoke("metadata:refresh", gameId),
   onMetadataUpdated: (callback: (status: MetadataGameStatus) => void): (() => void) => {
     const handler = (_event: Electron.IpcRendererEvent, data: MetadataGameStatus): void => callback(data);
     ipcRenderer.on("metadata:updated", handler);

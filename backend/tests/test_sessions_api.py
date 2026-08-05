@@ -154,3 +154,18 @@ def test_recover_orphaned_sessions(client: TestClient) -> None:
     assert recent[0]["total_play_time_seconds"] == 0
 
 
+def test_game_activity_returns_totals_and_session_history(client: TestClient) -> None:
+    game = create_game(client)
+    created = client.post("/api/v1/sessions", json={"game_id": game["id"]}).json()
+    client.patch(
+        f"/api/v1/sessions/{created['id']}",
+        json={"ended_at": datetime.now(timezone.utc).isoformat(), "duration_seconds": 120},
+    )
+
+    response = client.get(f"/api/v1/sessions/games/{game['id']}/activity")
+
+    assert response.status_code == 200
+    assert response.json()["total_play_time_seconds"] == 120
+    assert response.json()["launch_count"] == 1
+    assert len(response.json()["sessions"]) == 1
+

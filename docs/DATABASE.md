@@ -6,7 +6,7 @@ SQLite is the active local datastore. In development the default database file i
 
 | Table | Key fields | Purpose |
 | --- | --- | --- |
-| `games` | id, title, executable_path, install_path, cover_path, description, release_date, igdb_id, metadata_source, metadata_confidence, genres, created_at, updated_at | Implemented in migrations `20260729_01` and `20260802_01`; local library record and selected metadata. |
+| `games` | id, title, executable_path, install_path, cover_path, description, release_date, IGDB metadata, screenshot_paths, created_at, updated_at | Implemented through `20260804_01`; local library record, cached artwork references, and selected metadata. |
 | `game_sessions` | id, game_id, started_at, ended_at, duration_seconds | Implemented in migration `20260729_02`; immutable launch/playtime record. `game_id` FK with CASCADE delete. |
 
 ## Planned tables

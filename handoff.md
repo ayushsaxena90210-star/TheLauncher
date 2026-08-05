@@ -1,5 +1,39 @@
 # Phase 6 Handoff — Metadata & Cover Artwork Completed
 
+## Phase 7 Handoff — Game Details & Library Experience Completed
+
+Phase 7 is complete and verified. The launcher now includes a dedicated, deep-linked game-details page at `#/game/:gameId`, using the approved hero/banner composition with cover, quick actions, About, Media, Activity, Details, and Technical panels.
+
+### Phase 7 implementation summary
+
+- Selecting a library card cover or title opens the details page; Back returns to the library.
+- `useGameDetails` loads the game, activity summary, and locally cached screenshot indexes in parallel. Activity refreshes when Electron emits `game:exited`.
+- `GET /api/v1/sessions/games/{game_id}/activity` returns total playtime, last played, launch count, and recent sessions. Session aggregation remains in FastAPI.
+- IGDB enrichment now requests developer/publisher roles, platforms, total rating, age-rating value, themes, franchises, game modes, and official website data. The existing `MetadataService` persists fields returned by IGDB.
+- `20260804_01_add_game_details_metadata` adds nullable game-detail fields to `games`; no new tables or Electron SQLite access were introduced.
+- Screenshot listing and streaming endpoints keep cached artwork behind FastAPI. Automatic screenshot downloading is a later enhancement, so Media shows an intentional empty state until artwork exists locally.
+
+### Phase 7 verification
+
+- `npm run build` passed, including TypeScript checking.
+- `python -m pytest backend/tests -q` passed: 23 tests.
+- `git diff --check` passed.
+
+### Validation guide
+
+1. Start the app with configured Twitch credentials.
+2. Open a game and select **Refresh Metadata**.
+3. Reload the details page to see values returned by its matched IGDB record.
+4. Launch and close a game to confirm Activity updates.
+
+### Phase 7 known limitations
+
+- Existing games need one manual metadata refresh for the newly retrieved fields.
+- IGDB data coverage varies, especially for older games and regional classifications.
+- Automatic screenshot download, trailers, statistics dashboards, settings, packaging, cloud sync, achievements, friends, and online services are outside this phase.
+
+---
+
 ## Current State
 
 ## Phase 6 Update: Metadata & Cover Artwork Completed

@@ -64,5 +64,13 @@ Scanner jobs and candidate IDs are transient and scoped to one backend process a
 | `GET` | `/api/v1/metadata/status` | Read background queue status. |
 | `GET` | `/api/v1/metadata/games/{id}/status` | Read one game's in-memory queue/result status. |
 | `GET` | `/api/v1/metadata/games/{id}/cover` | Stream the game's locally cached cover image. |
+| `GET` | `/api/v1/metadata/games/{id}/screenshots` | List locally cached screenshot indexes. |
+| `GET` | `/api/v1/metadata/games/{id}/screenshots/{index}` | Stream one locally cached screenshot. |
+
+## Game activity endpoint
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/v1/sessions/games/{id}/activity` | Read playtime totals, last played, launch count, and recent sessions for one game. |
 
 Metadata fetching requires Twitch application credentials for IGDB. Missing credentials return `503` with `metadata_not_configured`; game CRUD and scanner imports remain local and available.

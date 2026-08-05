@@ -69,3 +69,8 @@ class SessionRepository:
             .limit(limit)
         )
         return list(session.execute(stmt).all())
+
+    def activity_for_game(self, session: Session, game_id: UUID, limit: int = 12) -> tuple[int, object | None, int, list[GameSession]]:
+        totals = session.execute(select(func.coalesce(func.sum(GameSession.duration_seconds), 0), func.max(GameSession.started_at), func.count(GameSession.id)).where(GameSession.game_id == game_id)).one()
+        sessions = list(session.scalars(select(GameSession).where(GameSession.game_id == game_id).order_by(GameSession.started_at.desc()).limit(limit)))
+        return int(totals[0] or 0), totals[1], int(totals[2] or 0), sessions

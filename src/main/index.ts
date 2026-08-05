@@ -136,6 +136,7 @@ app.whenReady().then(async () => {
     monitorMetadata(gameId);
     return result;
   });
+  ipcMain.handle("metadata:refresh", async (_event, gameId: string) => backendClient.refreshMetadata(gameId));
 
   await backendProcess.start();
   createWindow();
