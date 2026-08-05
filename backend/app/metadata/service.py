@@ -61,7 +61,7 @@ class MetadataService:
         self._provider = provider
         self._cache_dir = artwork_cache_dir
         self._repo = GameRepository()
-        self._queue: asyncio.Queue[UUID] = asyncio.Queue()
+        self._queue: asyncio.Queue[tuple[UUID, bool]] = asyncio.Queue()
         self._pending_ids: set[UUID] = set()
         self._state = MetadataServiceState()
         self._worker_task: asyncio.Task | None = None
@@ -87,7 +87,7 @@ class MetadataService:
                 pass
             logger.info("Metadata background worker stopped.")
 
-    async def enqueue(self, game_id: UUID) -> bool:
+    async def enqueue(self, game_id: UUID, *, force: bool = False) -> bool:
         """Add a game ID to the metadata queue.  Returns False if already pending."""
         async with self._lock:
             if game_id in self._pending_ids:
@@ -95,7 +95,7 @@ class MetadataService:
                 return False
             self._pending_ids.add(game_id)
 
-        await self._queue.put(game_id)
+        await self._queue.put((game_id, force))
         self._state.queue_size = self._queue.qsize()
         logger.info("Enqueued game %s for metadata lookup.", game_id)
         return True
@@ -105,6 +105,14 @@ class MetadataService:
         count = 0
         for game_id in game_ids:
             if await self.enqueue(game_id):
+                count += 1
+        return count
+
+    async def refresh_many(self, game_ids: list[UUID]) -> int:
+        """Queue forced refreshes without blocking the local API request."""
+        count = 0
+        for game_id in game_ids:
+            if await self.enqueue(game_id, force=True):
                 count += 1
         return count
 
@@ -140,9 +148,9 @@ class MetadataService:
         """Process the metadata queue indefinitely."""
         while True:
             try:
-                game_id = await self._queue.get()
+                game_id, force = await self._queue.get()
                 self._state.queue_size = self._queue.qsize()
-                await self._process_game(game_id, force=False)
+                await self._process_game(game_id, force=force)
                 self._queue.task_done()
             except asyncio.CancelledError:
                 break

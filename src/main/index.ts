@@ -137,6 +137,23 @@ app.whenReady().then(async () => {
     return result;
   });
   ipcMain.handle("metadata:refresh", async (_event, gameId: string) => backendClient.refreshMetadata(gameId));
+  ipcMain.handle("settings:get-overview", () => backendClient.getSettingsOverview());
+  ipcMain.handle("settings:update", (_event, payload) => backendClient.updateSettings(payload));
+  ipcMain.handle("settings:add-scan-root", (_event, path: string) => backendClient.addScanRoot(path));
+  ipcMain.handle("settings:remove-scan-root", (_event, rootId: string) => backendClient.removeScanRoot(rootId));
+  ipcMain.handle("settings:saved-scan-roots", () => backendClient.savedScanRoots());
+  ipcMain.handle("settings:clear-cache", () => backendClient.clearCache());
+  ipcMain.handle("settings:rebuild-cache", () => backendClient.rebuildCache());
+  ipcMain.handle("settings:refresh-metadata", () => backendClient.refreshAllMetadata());
+  ipcMain.handle("window:minimize", (event) => BrowserWindow.fromWebContents(event.sender)?.minimize());
+  ipcMain.handle("window:toggle-maximize", (event) => {
+    const window = BrowserWindow.fromWebContents(event.sender);
+    if (!window) return false;
+    if (window.isMaximized()) window.unmaximize();
+    else window.maximize();
+    return window.isMaximized();
+  });
+  ipcMain.handle("window:close", (event) => BrowserWindow.fromWebContents(event.sender)?.close());
 
   await backendProcess.start();
   createWindow();

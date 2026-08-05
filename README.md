@@ -4,7 +4,7 @@ An offline-first desktop game launcher being built as a portfolio-quality softwa
 
 ## Status
 
-**Phase 7 complete.** Local games have deep-linked details pages with cached IGDB metadata, screenshots, and session activity.
+**Phase 8 Milestone A complete.** Local settings, persisted scan folders, metadata/cache management, themes, and desktop window controls are available.
 
 ## Scope
 
@@ -48,7 +48,7 @@ src/        Electron main/preload and React renderer source
 
 ## Roadmap
 
-Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 added optional IGDB metadata and locally cached cover artwork. Phase 7 adds a complete game-details experience with media and activity. Subsequent phases cover statistics, settings, polish, and packaging.
+Phase 1 established the runnable Electron + React + FastAPI development environment, base theme, and local health connection. Phase 2 added the SQLite persistence foundation and local API contracts. Phase 3 added the game library UI and manual game management. Phase 4 added launching and play sessions. Phase 5 added selected-folder scanning, review, and explicit batch import. Phase 6 added optional IGDB metadata and locally cached cover artwork. Phase 7 added a complete game-details experience with media and activity. Phase 8 Milestone A adds local settings infrastructure and its Settings Workspace.
 
 See [Roadmap](docs/ROADMAP.md), [Phase 1 notes](docs/Phase1.md), [Phase 2 notes](docs/Phase2.md), [Phase 3 notes](docs/Phase3.md), [Phase 4 notes](docs/Phase4.md), [Phase 5 notes](docs/Phase5.md), [Phase 6 notes](docs/Phase6.md), and the current [handoff](HANDOFF.md).
 
@@ -85,7 +85,7 @@ On systems where `python` does not identify the environment containing FastAPI, 
 
 ## Known limitations
 
-Metadata enrichment requires local Twitch application credentials (`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`) for IGDB access. Statistics, settings, and favourites are intentionally not implemented yet. Unfinished play sessions (e.g. launcher closed while a game is running) are not recovered automatically.
+Metadata enrichment requires local Twitch application credentials (`TWITCH_CLIENT_ID` and `TWITCH_CLIENT_SECRET`) for IGDB access. Desktop startup/window preferences remain placeholders for a future approved Phase 8 milestone. Unfinished play sessions (e.g. launcher closed while a game is running) are not recovered automatically.
 
 ## Credits
 

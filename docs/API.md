@@ -74,3 +74,17 @@ Scanner jobs and candidate IDs are transient and scoped to one backend process a
 | `GET` | `/api/v1/sessions/games/{id}/activity` | Read playtime totals, last played, launch count, and recent sessions for one game. |
 
 Metadata fetching requires Twitch application credentials for IGDB. Missing credentials return `503` with `metadata_not_configured`; game CRUD and scanner imports remain local and available.
+
+## Settings endpoints
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/api/v1/settings` | Read local preference, saved-root, library, provider, and cache overview. |
+| `PUT` | `/api/v1/settings` | Update validated theme and scan options. |
+| `POST` | `/api/v1/settings/scan-roots` | Persist one absolute local scan folder. |
+| `DELETE` | `/api/v1/settings/scan-roots/{id}` | Remove a saved folder only. |
+| `POST` | `/api/v1/settings/scan-roots/rescan` | Read enabled roots for the existing Electron scan lifecycle. |
+| `GET` | `/api/v1/settings/cache` | Read safe artwork-cache statistics. |
+| `POST` | `/api/v1/settings/cache/clear` | Delete only files under the configured artwork cache and clear their references. |
+| `POST` | `/api/v1/settings/cache/rebuild` | Remove unreferenced files from the configured artwork cache. |
+| `POST` | `/api/v1/settings/metadata/refresh` | Queue eligible local games for provider refresh. |

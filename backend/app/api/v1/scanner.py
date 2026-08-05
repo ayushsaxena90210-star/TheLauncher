@@ -5,6 +5,7 @@ from ...database import get_session
 from ...scanner import ScannerService
 from ...metadata.runtime import get_metadata_service, metadata_is_configured
 from ...schemas import ScanImportRequest, ScanImportResponse, ScanStartRequest, ScanStatusResponse
+from ...settings_service import SettingsService
 
 router = APIRouter(prefix="/scanner", tags=["scanner"])
 service = ScannerService()
@@ -32,7 +33,7 @@ async def import_scan_candidates(
     scan_id: str, payload: ScanImportRequest, session: Session = Depends(get_session)
 ) -> dict:
     imported, skipped, imported_game_ids, job = service.import_candidates(scan_id, payload.candidate_ids, session)
-    if imported_game_ids and metadata_is_configured():
+    if imported_game_ids and metadata_is_configured() and SettingsService().get_settings(session).scan_options.queue_metadata:
         await get_metadata_service().enqueue_many(imported_game_ids)
     return {
         "scan_id": scan_id,

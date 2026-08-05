@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from pathlib import Path
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -192,3 +193,63 @@ class MetadataGameStatusResponse(BaseModel):
 
 class ScreenshotResponse(BaseModel):
     index: int
+
+
+class ScanRootCreate(BaseModel):
+    path: str = Field(min_length=1, max_length=2048)
+
+    @field_validator("path")
+    @classmethod
+    def normalize_path(cls, value: str) -> str:
+        return normalize_absolute_path(value)
+
+
+class ScanRootResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    path: str
+    enabled: bool
+    created_at: datetime
+
+
+class ScanOptions(BaseModel):
+    queue_metadata: bool = True
+
+
+class SettingsResponse(BaseModel):
+    theme: Literal["light", "dark", "system"] = "system"
+    scan_options: ScanOptions = Field(default_factory=ScanOptions)
+
+
+class SettingsUpdate(BaseModel):
+    theme: Literal["light", "dark", "system"] | None = None
+    scan_options: ScanOptions | None = None
+
+
+class MetadataProviderStatusResponse(BaseModel):
+    provider: str = "IGDB"
+    configured: bool
+    queue_size: int = 0
+    last_refresh_at: datetime | None = None
+
+
+class CacheStatusResponse(BaseModel):
+    location: str
+    size_bytes: int
+    artwork_count: int
+    last_metadata_refresh_at: datetime | None = None
+    last_cleanup_at: datetime | None = None
+
+
+class CacheOperationResponse(CacheStatusResponse):
+    removed_count: int = 0
+    removed_bytes: int = 0
+
+
+class SettingsOverviewResponse(BaseModel):
+    settings: SettingsResponse
+    scan_roots: list[ScanRootResponse] = Field(default_factory=list)
+    library_size: int
+    metadata: MetadataProviderStatusResponse
+    cache: CacheStatusResponse

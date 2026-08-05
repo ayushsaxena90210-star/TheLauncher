@@ -85,6 +85,18 @@ export type MetadataGameStatus = {
   metadata_status: "queued" | "fetching" | "success" | "failed" | null;
 };
 
+export type ThemePreference = "light" | "dark" | "system";
+export type ScanRoot = { id: string; path: string; enabled: boolean; created_at: string };
+export type CacheStatus = { location: string; size_bytes: number; artwork_count: number; last_metadata_refresh_at: string | null; last_cleanup_at: string | null };
+export type SettingsOverview = {
+  settings: { theme: ThemePreference; scan_options: { queue_metadata: boolean } };
+  scan_roots: ScanRoot[];
+  library_size: number;
+  metadata: { provider: string; configured: boolean; queue_size: number; last_refresh_at: string | null };
+  cache: CacheStatus;
+};
+export type CacheOperation = CacheStatus & { removed_count: number; removed_bytes: number };
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const response = await fetch(`${BACKEND_BASE_URL}${path}`, {
     ...options,
@@ -148,4 +160,15 @@ export const backendClient = {
 
   getMetadataGameStatus: (gameId: string): Promise<MetadataGameStatus> =>
     request<MetadataGameStatus>(`/metadata/games/${gameId}/status`),
+
+  getSettingsOverview: (): Promise<SettingsOverview> => request<SettingsOverview>("/settings"),
+  updateSettings: (payload: Partial<SettingsOverview["settings"]>): Promise<SettingsOverview["settings"]> =>
+    request<SettingsOverview["settings"]>("/settings", { method: "PUT", body: JSON.stringify(payload) }),
+  addScanRoot: (path: string): Promise<ScanRoot> =>
+    request<ScanRoot>("/settings/scan-roots", { method: "POST", body: JSON.stringify({ path }) }),
+  removeScanRoot: (rootId: string): Promise<void> => request<void>(`/settings/scan-roots/${rootId}`, { method: "DELETE" }),
+  savedScanRoots: (): Promise<{ roots: string[] }> => request<{ roots: string[] }>("/settings/scan-roots/rescan", { method: "POST" }),
+  clearCache: (): Promise<CacheOperation> => request<CacheOperation>("/settings/cache/clear", { method: "POST" }),
+  rebuildCache: (): Promise<CacheOperation> => request<CacheOperation>("/settings/cache/rebuild", { method: "POST" }),
+  refreshAllMetadata: (): Promise<{ queued_count: number }> => request<{ queued_count: number }>("/settings/metadata/refresh", { method: "POST" }),
 };

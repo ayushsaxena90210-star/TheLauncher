@@ -11,4 +11,4 @@ def test_initial_migration_creates_games_table(tmp_path, monkeypatch) -> None:
     command.upgrade(config, "head")
 
     inspector = inspect(create_engine(f"sqlite:///{database_path.as_posix()}"))
-    assert {"alembic_version", "games"}.issubset(inspector.get_table_names())
+    assert {"alembic_version", "games", "settings", "scan_roots"}.issubset(inspector.get_table_names())

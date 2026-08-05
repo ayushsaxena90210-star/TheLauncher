@@ -28,3 +28,25 @@ class CacheManager:
             return True
         except ValueError:
             return False
+
+    def files(self) -> list[Path]:
+        """Return regular files inside the cache, never following directory links."""
+        if not self.cache_dir.exists():
+            return []
+        return [path for path in self.cache_dir.rglob("*") if path.is_file() and self.contains(path)]
+
+    def statistics(self) -> tuple[int, int]:
+        files = self.files()
+        return sum(path.stat().st_size for path in files), len(files)
+
+    def remove_files(self, files: list[Path]) -> tuple[int, int]:
+        removed_count = 0
+        removed_bytes = 0
+        for path in files:
+            if not self.contains(path) or not path.is_file():
+                continue
+            size = path.stat().st_size
+            path.unlink()
+            removed_count += 1
+            removed_bytes += size
+        return removed_count, removed_bytes

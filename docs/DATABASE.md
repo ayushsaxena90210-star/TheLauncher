@@ -13,10 +13,10 @@ SQLite is the active local datastore. In development the default database file i
 
 | Table | Key fields | Purpose |
 | --- | --- | --- |
-| `scan_roots` | id, path, enabled, created_at | User-approved folders to scan. |
+| `scan_roots` | id, path, enabled, created_at | Implemented in `20260805_01`; user-approved folders for saved scans. |
 | `scanner_ignores` | id, pattern, scope | User or system rules for ignoring known non-game executables. |
 | `metadata_cache` | id, provider, external_id, payload_json, fetched_at, expires_at | Deferred structured remote-response cache; Phase 6 caches downloaded cover files under the database-adjacent artwork cache instead. |
-| `settings` | key, value_json, updated_at | Local settings, including theme and metadata API key reference. |
+| `settings` | key, value_json, updated_at | Implemented in `20260805_01`; local theme, scan options, and cache-maintenance timestamps. Credentials are never persisted here. |
 
 ## Relationships and constraints
 

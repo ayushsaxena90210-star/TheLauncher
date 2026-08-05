@@ -26,6 +26,11 @@ type ScanStatus = { scan_id: string; state: "scanning" | "cancelled" | "complete
 type ScanImportResult = { scan_id: string; imported_count: number; skipped_count: number; summary: ScanSummary };
 type MetadataEnqueueResult = { game_id: string; state: "queued" | "pending"; message: string | null };
 type MetadataGameStatus = { game_id: string; metadata_status: "queued" | "fetching" | "success" | "failed" | null };
+type ThemePreference = "light" | "dark" | "system";
+type ScanRoot = { id: string; path: string; enabled: boolean; created_at: string };
+type CacheStatus = { location: string; size_bytes: number; artwork_count: number; last_metadata_refresh_at: string | null; last_cleanup_at: string | null };
+type SettingsOverview = { settings: { theme: ThemePreference; scan_options: { queue_metadata: boolean } }; scan_roots: ScanRoot[]; library_size: number; metadata: { provider: string; configured: boolean; queue_size: number; last_refresh_at: string | null }; cache: CacheStatus };
+type CacheOperation = CacheStatus & { removed_count: number; removed_bytes: number };
 
 declare global {
   interface Window {
@@ -45,6 +50,17 @@ declare global {
       enqueueMetadata: (gameId: string) => Promise<MetadataEnqueueResult>;
       refreshMetadata: (gameId: string) => Promise<MetadataEnqueueResult>;
       onMetadataUpdated: (callback: (status: MetadataGameStatus) => void) => () => void;
+      getSettingsOverview: () => Promise<SettingsOverview>;
+      updateSettings: (payload: Partial<SettingsOverview["settings"]>) => Promise<SettingsOverview["settings"]>;
+      addScanRoot: (path: string) => Promise<ScanRoot>;
+      removeScanRoot: (rootId: string) => Promise<void>;
+      savedScanRoots: () => Promise<{ roots: string[] }>;
+      clearCache: () => Promise<CacheOperation>;
+      rebuildCache: () => Promise<CacheOperation>;
+      refreshAllMetadata: () => Promise<{ queued_count: number }>;
+      minimizeWindow: () => Promise<void>;
+      toggleMaximizeWindow: () => Promise<boolean>;
+      closeWindow: () => Promise<void>;
     };
   }
 }

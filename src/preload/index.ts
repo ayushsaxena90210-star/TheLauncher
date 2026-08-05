@@ -32,6 +32,11 @@ export type ScanStatus = { scan_id: string; state: "scanning" | "cancelled" | "c
 export type ScanImportResult = { scan_id: string; imported_count: number; skipped_count: number; summary: ScanSummary };
 export type MetadataEnqueueResult = { game_id: string; state: "queued" | "pending"; message: string | null };
 export type MetadataGameStatus = { game_id: string; metadata_status: "queued" | "fetching" | "success" | "failed" | null };
+export type ThemePreference = "light" | "dark" | "system";
+export type ScanRoot = { id: string; path: string; enabled: boolean; created_at: string };
+export type CacheStatus = { location: string; size_bytes: number; artwork_count: number; last_metadata_refresh_at: string | null; last_cleanup_at: string | null };
+export type SettingsOverview = { settings: { theme: ThemePreference; scan_options: { queue_metadata: boolean } }; scan_roots: ScanRoot[]; library_size: number; metadata: { provider: string; configured: boolean; queue_size: number; last_refresh_at: string | null }; cache: CacheStatus };
+export type CacheOperation = CacheStatus & { removed_count: number; removed_bytes: number };
 
 function subscribeScanEvent(channel: string, callback: (scan: ScanStatus) => void): () => void {
   const handler = (_event: Electron.IpcRendererEvent, scan: ScanStatus): void => callback(scan);
@@ -73,6 +78,17 @@ const launcherApi = {
     ipcRenderer.on("metadata:updated", handler);
     return () => ipcRenderer.removeListener("metadata:updated", handler);
   },
+  getSettingsOverview: (): Promise<SettingsOverview> => ipcRenderer.invoke("settings:get-overview"),
+  updateSettings: (payload: Partial<SettingsOverview["settings"]>): Promise<SettingsOverview["settings"]> => ipcRenderer.invoke("settings:update", payload),
+  addScanRoot: (path: string): Promise<ScanRoot> => ipcRenderer.invoke("settings:add-scan-root", path),
+  removeScanRoot: (rootId: string): Promise<void> => ipcRenderer.invoke("settings:remove-scan-root", rootId),
+  savedScanRoots: (): Promise<{ roots: string[] }> => ipcRenderer.invoke("settings:saved-scan-roots"),
+  clearCache: (): Promise<CacheOperation> => ipcRenderer.invoke("settings:clear-cache"),
+  rebuildCache: (): Promise<CacheOperation> => ipcRenderer.invoke("settings:rebuild-cache"),
+  refreshAllMetadata: (): Promise<{ queued_count: number }> => ipcRenderer.invoke("settings:refresh-metadata"),
+  minimizeWindow: (): Promise<void> => ipcRenderer.invoke("window:minimize"),
+  toggleMaximizeWindow: (): Promise<boolean> => ipcRenderer.invoke("window:toggle-maximize"),
+  closeWindow: (): Promise<void> => ipcRenderer.invoke("window:close"),
 };
 
 contextBridge.exposeInMainWorld("launcher", launcherApi);

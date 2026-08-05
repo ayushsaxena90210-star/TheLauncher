@@ -10,7 +10,7 @@ sys.path.insert(0, str(project_root))
 
 from backend.app.config import settings
 from backend.app.database import Base
-from backend.app.models import Game, GameSession  # noqa: F401
+from backend.app.models import AppSetting, Game, GameSession, ScanRoot  # noqa: F401
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.database_url)
